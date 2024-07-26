@@ -3,16 +3,23 @@ const router = express.Router();
 const Item = require("../models/pemesanan");
 const { authenticate, authorize } = require("../middleware/auth");
 
-router.post("/", authenticate(['admin']), async (req, res, next) => {
+router.post("/", authenticate, authorize(["admin"]), async (req, res, next) => {
   try {
-    const { totalHarga, alamat, status, metodePembayaran, pelangganID, keranjangID  } = req.body;
+    const {
+      totalHarga,
+      alamat,
+      status,
+      metodePembayaran,
+      pelangganID,
+      keranjangID,
+    } = req.body;
     const newItem = await Item.create({
       totalHarga,
       alamat,
       status,
       metodePembayaran,
       pelangganID,
-      keranjangID
+      keranjangID,
     });
     res.status(201).json(newItem);
   } catch (err) {
@@ -43,31 +50,37 @@ router.get("/:id", authenticate, async (req, res, next) => {
 });
 
 router.put(
-    "/:id",
-    authenticate,
-    authorize(["admin"]),
-    async (req, res, next) => {
-      try {
-        const { totalHarga, alamat, status, metodePembayaran, pelangganID, keranjangID } = req.body;
-        const item = await Item.findByPk(req.params.id);
-        if (item) {
-          item.totalHarga = totalHarga;
-          item.alamat = alamat;
-          item.status = status;
-          item.metodePembayaran = metodePembayaran;
-          item.pelangganID = pelangganID;
-          item.keranjangID = keranjangID;
-          await item.save();
-          res.json(item);
-        } else {
-          res.status(404).json({ message: "Pemesanan tidak ditemukan" });
-        }
-      } catch (err) {
-        next(err);
+  "/:id",
+  authenticate,
+  authorize(["admin"]),
+  async (req, res, next) => {
+    try {
+      const {
+        totalHarga,
+        alamat,
+        status,
+        metodePembayaran,
+        pelangganID,
+        keranjangID,
+      } = req.body;
+      const item = await Item.findByPk(req.params.id);
+      if (item) {
+        item.totalHarga = totalHarga;
+        item.alamat = alamat;
+        item.status = status;
+        item.metodePembayaran = metodePembayaran;
+        item.pelangganID = pelangganID;
+        item.keranjangID = keranjangID;
+        await item.save();
+        res.json(item);
+      } else {
+        res.status(404).json({ message: "Pemesanan tidak ditemukan" });
       }
+    } catch (err) {
+      next(err);
     }
-  );
-  
+  }
+);
 
 router.delete(
   "/:id",

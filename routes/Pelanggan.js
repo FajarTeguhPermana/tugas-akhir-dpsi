@@ -4,6 +4,7 @@ const Item = require("../models/pelanggan");
 const { authenticate, authorize } = require("../middleware/auth");
 
 // Endpoint untuk menambahkan akun pelanggan
+// user dengan role Customer hanya di beri akses untuk menambahkan akun pelanggan dan hanya satu kali.
 router.post(
   "/",
   authenticate,
@@ -36,7 +37,7 @@ router.post(
   }
 );
 
-// Endpoint untuk menampilkan semua data pelanggan
+// Endpoint untuk menampilkan semua data pelanggan dan hanya dapat diakses oleh user dengan role admin
 router.get("/", authenticate, authorize(["admin"]), async (req, res, next) => {
   try {
     const items = await Item.findAll();
@@ -46,7 +47,7 @@ router.get("/", authenticate, authorize(["admin"]), async (req, res, next) => {
   }
 });
 
-// Endpoint untuk menampilkan semua data pelanggan berdasarkan ID
+// Endpoint untuk menampilkan semua data pelanggan berdasarkan ID dan hanya dapat diakses oleh user dengan role admin
 router.get(
   "/:id",
   authenticate,
@@ -65,7 +66,7 @@ router.get(
   }
 );
 
-// Endpoint untuk mengubah data pelanggan berdasarkan ID
+// Endpoint untuk mengubah data pelanggan berdasarkan ID dan hanya dapat diakses oleh user dengan role admin
 router.put(
   "/:id",
   authenticate,
@@ -89,7 +90,7 @@ router.put(
   }
 );
 
-// Endpoint untuk menghapus data pelanggan berdasarkan ID
+// Endpoint untuk menghapus data pelanggan berdasarkan ID dan hanya dapat diakses oleh user dengan role admin
 router.delete(
   "/:id",
   authenticate,

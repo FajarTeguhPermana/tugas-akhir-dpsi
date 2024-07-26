@@ -4,6 +4,8 @@ const Produk = require("../models/produk");
 const Item = require("../models/keranjang");
 const { authenticate, authorize } = require("../middleware/auth");
 
+
+// endpoint untuk memambahkan produk ke keranjang
 router.post("/", authenticate, async (req, res, next) => {
   try {
     const { jumlah, pelangganID, produkID } = req.body;
@@ -28,6 +30,7 @@ router.post("/", authenticate, async (req, res, next) => {
   }
 });
 
+// endpoint untuk menampilkan semua isi keranjang
 router.get("/", authenticate, async (req, res, next) => {
   try {
     const items = await Item.findAll();
@@ -37,6 +40,7 @@ router.get("/", authenticate, async (req, res, next) => {
   }
 });
 
+// endpoint untuk menampilkan berdasarkan ID
 router.get("/:id", authenticate, async (req, res, next) => {
   try {
     const item = await Item.findByPk(req.params.id);
@@ -50,6 +54,7 @@ router.get("/:id", authenticate, async (req, res, next) => {
   }
 });
 
+// Endpont untuk mengubah isi keranjang berdasarkan ID
 router.put("/:id", authenticate, async (req, res, next) => {
   try {
     const { jumlah, pelangganID, produkID } = req.body;
@@ -80,6 +85,7 @@ router.put("/:id", authenticate, async (req, res, next) => {
   }
 });
 
+// Endpoint untuk menghapus berdasarkan ID
 router.delete("/:id", authenticate, async (req, res, next) => {
   try {
     const item = await Item.findByPk(req.params.id);
